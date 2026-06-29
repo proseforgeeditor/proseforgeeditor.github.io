@@ -328,9 +328,9 @@
         const actionBtn = document.getElementById('download-target');
         const systemArchitecture = navigator.platform.toLowerCase();
 
-       // Point directly to the file sitting right inside your repository folder
-        const RELEASE_MAC_PATH = "ProseForge.app.zip";
-        const RELEASE_WIN_PATH = "ProseForge.msi"; // Or leave it as fallback
+      // Paste your copied link between the quotes below
+    const RELEASE_MAC_PATH = "https://github.com/glitchgod/proseforge-site/releases/download/v0.1.0/ProseForge.app.zip";
+    const RELEASE_WIN_PATH = "#";
         
         if (systemArchitecture.includes('win')) {
             actionBtn.innerText = "Download for Windows (.msi)";
