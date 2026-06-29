@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProseForge — Private, Local, Multilingual AI Editor</title>
+    <style>
+        :root {
+            --bg: #0b0b0f;
+            --surface: #13131a;
+            --surface-accent: #1c1c27;
+            --primary: #2563eb;
+            --primary-glow: rgba(37, 99, 235, 0.4);
+            --text: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border: #27273a;
+            --french-blue: #0055a5;
+            --french-red: #ef4135;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Ambient background glow */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(37,99,235,0.15) 0%, rgba(11,11,15,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 90%;
+            text-align: center;
+            padding: 80px 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .logo-title-group {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .main-logo {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            border-radius: 14px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            filter: drop-shadow(0 0 8px var(--primary-glow));
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .brand-name {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            background: linear-gradient(135deg, #ffffff 30%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+
+        .tagline {
+            font-size: 1.35rem;
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin: 0 auto 50px auto;
+            line-height: 1.5;
+            font-weight: 400;
+        }
+
+        .download-card {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            text-align: left;
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-info {
+            flex: 1;
+        }
+
+        .download-info h2 {
+            margin: 0 0 12px 0;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .download-info p {
+            margin: 0 0 20px 0;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            font-size: 1.05rem;
+        }
+
+        .inline-badge-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .badge {
+            background: var(--surface-accent);
+            border: 1px solid var(--border);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .badge.lang-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .flag-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .flag-en { background-color: var(--primary); }
+        .flag-fr { background: linear-gradient(90deg, var(--french-blue) 33%, #fff 33%, #fff 66%, var(--french-red) 66%); }
+
+        .action-zone {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            padding: 18px 36px;
+            font-size: 1.15rem;
+            font-weight: 600;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px var(--primary-glow);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255,255,255,0.1);
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            background-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(37, 99, 235, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .requirements {
+            font-size: 0.85rem;
+            color: #52526b;
+            margin: 0;
+            font-family: monospace;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .feature-card {
+            background-color: var(--surface);
+            border: 1px solid var(--border);
+            padding: 30px;
+            border-radius: 18px;
+            text-align: left;
+            position: relative;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: #3a3a54;
+        }
+
+        .feature-card h3 {
+            margin: 0 0 12px 0;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .feature-card p {
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .footer {
+            margin-top: 80px;
+            font-size: 0.85rem;
+            color: #475569;
+            letter-spacing: 0.5px;
+        }
+
+        /* Core Keyframe Animations */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Responsive Breakpoint handling */
+        @media (max-width: 768px) {
+            .download-card {
+                flex-direction: column;
+                text-align: center;
+                padding: 30px;
+                gap: 24px;
+            }
+            .download-info { text-align: center; }
+            .inline-badge-group { justify-content: center; }
+            .action-zone { width: 100%; }
+            .btn { width: 100%; }
+            .brand-name { font-size: 2.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="logo-title-group">
+            <img src="app-icon.png" alt="ProseForge Logo" class="main-logo" onerror="this.style.display='none'">
+            <h1 class="brand-name">ProseForge</h1>
+        </div>
+        
+        <p class="tagline">A beautiful, open-source editorial workspace powered completely by local dual-AI validation. No endpoints. No telemetry. Absolute data sovereignty.</p>
+
+        <div class="download-card">
+            <div class="download-info">
+                <h2>Experience Cognitive Editing</h2>
+                <p>Run complex stylistic evaluations, syntax profiling, and cross-agent auditing natively directly on your personal hardware.</p>
+                <div class="inline-badge-group">
+                    <span class="badge">v0.1.0</span>
+                    <span class="badge">MIT License</span>
+                    <span class="badge lang-badge"><span class="flag-dot flag-en"></span>EN</span>
+                    <span class="badge lang-badge"><span class="flag-dot flag-fr"></span>FR</span>
+                </div>
+            </div>
+
+            <div class="action-zone">
+                <a href="#" id="download-target" class="btn">Detecting System...</a>
+                <p class="requirements">Ollama: llama3.2 + qwen2.5</p>
+            </div>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>Absolute Confidentiality</h3>
+                <p>Designed strictly for security-critical operations. Your logs, notes, drafts, and configurations never touch remote servers.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Asynchronous Pre-Filtering</h3>
+                <p>Executes multi-threaded algorithmic heuristics down at the Rust layer to instantly flag patterns before structural evaluation.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Language Context Inversion</h3>
+                <p>Natively monitors input structures to dynamically invert system prompt taxonomies seamlessly between English and French.</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            Built using Tauri, React, TypeScript, and Rust. Optimized for local execution.
+        </div>
+    </div>
+
+    <script>
+        // Automatic Operating System Distribution Matching Engine
+        const actionBtn = document.getElementById('download-target');
+        const systemArchitecture = navigator.platform.toLowerCase();
+
+        // Change these strings to point to your exact generated production bundles
+        const RELEASE_MAC_PATH = "https://github.com/YOUR_USERNAME/YOUR_REPO/releases/download/v0.1.0/ProseForge.dmg";
+        const RELEASE_WIN_PATH = "https://github.com/YOUR_USERNAME/YOUR_REPO/releases/download/v0.1.0/ProseForge.msi";
+
+        if (systemArchitecture.includes('win')) {
+            actionBtn.innerText = "Download for Windows (.msi)";
+            actionBtn.href = RELEASE_WIN_PATH;
+        } else if (systemArchitecture.includes('mac') || systemArchitecture.includes('iphone') || systemArchitecture.includes('ipad')) {
+            actionBtn.innerText = "Download for macOS (.dmg)";
+            actionBtn.href = RELEASE_MAC_PATH;
+        } else {
+            actionBtn.innerText = "Download Distribution Package";
+            actionBtn.href = RELEASE_MAC_PATH;
+        }
+    </script>
+</body>
+</html>
