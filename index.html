@@ -328,10 +328,10 @@
         const actionBtn = document.getElementById('download-target');
         const systemArchitecture = navigator.platform.toLowerCase();
 
-        // Change these strings to point to your exact generated production bundles
-        const RELEASE_MAC_PATH = "https://github.com/YOUR_USERNAME/YOUR_REPO/releases/download/v0.1.0/ProseForge.dmg";
-        const RELEASE_WIN_PATH = "https://github.com/YOUR_USERNAME/YOUR_REPO/releases/download/v0.1.0/ProseForge.msi";
-
+       // Point directly to the file sitting right inside your repository folder
+        const RELEASE_MAC_PATH = "ProseForge.app.zip";
+        const RELEASE_WIN_PATH = "ProseForge.msi"; // Or leave it as fallback
+        
         if (systemArchitecture.includes('win')) {
             actionBtn.innerText = "Download for Windows (.msi)";
             actionBtn.href = RELEASE_WIN_PATH;
